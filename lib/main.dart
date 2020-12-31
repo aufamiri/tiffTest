@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoimage/geoimage.dart';
+import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:proj4dart/proj4dart.dart';
 import 'package:tiffTest/map.dart';
@@ -55,24 +56,23 @@ class _MyHomePageState extends State<MyHomePage> {
     var raster = GeoImage(file);
     raster.read();
 
-    // Image test = decodeTiff(file);
-
     // print("test : ${raster.imageBytes}");
     // print("coba : ${raster.image}");
     // print("nyobak : ${raster.geoInfo}");
-    data = raster.image;
+    // data = raster.image;
+    data = encodePng(raster.image);
 // Env[-9551282.179409388 : -9505452.568807404 , 5571611.137992457 : 5601393.000950782 ]
   }
 
   void _convert() {
-    Point point = Point(x: -9551282.179, y: 5601393.001);
+    // Point point = Point(x: -9551282.179, y: 5601393.001);
 
-    Projection projSrc = Projection('EPSG:3857');
-    Projection projDst = Projection('EPSG:4326');
+    // Projection projSrc = Projection('EPSG:3857');
+    // Projection projDst = Projection('EPSG:4326');
 
-    var result = projSrc.transform(projDst, point);
-    //THE Resulting Coordinate is Long,Lat !!
-    print(result);
+    // var result = projSrc.transform(projDst, point);
+    // //THE Resulting Coordinate is Long,Lat !!
+    // print(result);
   }
 
   @override

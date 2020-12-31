@@ -3,13 +3,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image/image.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tiffTest/locate.dart';
 import 'secret.dart';
 
 class MapView extends StatefulWidget {
-  Image assets;
+  Uint8List assets;
 
   MapView(this.assets);
 
@@ -49,7 +48,7 @@ class _MapViewState extends State<MapView> {
     final Uint8List list = bytes.buffer.asUint8List();
     return _mapController.addImageSource(
       name,
-      encodePng(widget.assets),
+      widget.assets,
       // list,
       LatLngQuad(
         topLeft: LatLng(44.87016, -85.79928),
@@ -98,7 +97,7 @@ class _MapViewState extends State<MapView> {
               accessToken: token,
               styleString: _mapStyles,
               initialCameraPosition: CameraPosition(
-                  zoom: 5.0, target: LatLng(44.87016, -85.39184)),
+                  zoom: 10.0, target: LatLng(44.87016, -85.39184)),
               onMapCreated: _onMapCreated,
               onMapLongClick: (Point<double> point, LatLng coordinates) async {
                 await _mapController.addSymbol(
