@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   geoimage: ^0.1.2
   path_provider: ^1.6.24
+  proj4dart: ^1.0.5
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoimage/geoimage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:proj4dart/proj4dart.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,6 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
 // Env[-9551282.179409388 : -9505452.568807404 , 5571611.137992457 : 5601393.000950782 ]
   }
 
+  void _convert() {
+    Point point = Point(x: -9551282.179, y: 5601393.001);
+
+    Projection projSrc = Projection('EPSG:3857');
+    Projection projDst = Projection('EPSG:4326');
+
+    var result = projSrc.transform(projDst, point);
+    print(result);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Center(
           child: RaisedButton(
-            onPressed: _raster,
+            onPressed: _convert,
             child: Text("PUSH HERE"),
           ),
         ));
