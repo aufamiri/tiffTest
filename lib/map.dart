@@ -40,8 +40,6 @@ class _MapViewState extends State<MapView> {
     // );
   }
 
-  void _onStyleLoaded() {}
-
   /// Adds an asset image to the currently displayed style
   Future<void> addImageFromAsset(String name, String assetName) async {
     final ByteData bytes = await rootBundle.load(assetName);
