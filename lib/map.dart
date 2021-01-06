@@ -19,6 +19,7 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   MapboxMapController _mapController;
   String _mapStyles = MapboxStyles.DARK;
+  List<String> log = List();
 
   void _onMapCreated(MapboxMapController controller) async {
     _mapController = controller;
@@ -43,10 +44,13 @@ class _MapViewState extends State<MapView> {
   Future<File> getImageFileFromAssets(String path) async {
     print("STAT");
     final byteData = await rootBundle.load(path);
+    setState(() {
+      log.add("reading file from asset...");
+    });
     print("HAI");
     print(byteData.buffer);
     Directory tempPath = await getTemporaryDirectory();
-    final file = File('${tempPath.path}/test.tif');
+    final file = File('${tempPath.path}/map.tif');
     await file.writeAsBytes(byteData.buffer
         .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
@@ -56,7 +60,7 @@ class _MapViewState extends State<MapView> {
 
   Future<Uint8List> _raster() async {
     // Image _test = Image.asset("asset/icon.png");
-    var file = await getImageFileFromAssets("asset/landsat.tif");
+    var file = await getImageFileFromAssets("asset/map.tif");
     var raster = GeoImage(file);
     raster.read();
 
@@ -72,16 +76,25 @@ class _MapViewState extends State<MapView> {
   Future<void> addImageFromAsset(String name, String assetName) async {
     // final ByteData bytes = await rootBundle.load(assetName);
     // final Uint8List list = bytes.buffer.asUint8List();
+    setState(() {
+      log.add("loading image....");
+    });
     final Uint8List list = await _raster();
+    if (list.isNotEmpty) {
+      setState(() {
+        log.add("load image success");
+      });
+    }
+
     return _mapController.addImageSource(
       name,
       // widget.assets,
       list,
       LatLngQuad(
-        topLeft: LatLng(44.87016, -85.79928),
-        topRight: LatLng(44.87016, -85.39184),
-        bottomRight: LatLng(44.68254, -85.39184),
-        bottomLeft: LatLng(44.68254, -85.79928),
+        topLeft: LatLng(-6.96240535, 107.63321113),
+        topRight: LatLng(-6.96240535, 107.63762236),
+        bottomRight: LatLng(-6.96678662, 107.63762236),
+        bottomLeft: LatLng(-6.96678662, 107.63321113),
       ),
     );
   }
@@ -124,7 +137,7 @@ class _MapViewState extends State<MapView> {
               accessToken: token,
               styleString: _mapStyles,
               initialCameraPosition: CameraPosition(
-                  zoom: 10.0, target: LatLng(44.87016, -85.39184)),
+                  zoom: 8.0, target: LatLng(-6.96678662, 107.63321113)),
               onMapCreated: _onMapCreated,
             ),
           ),
@@ -139,6 +152,17 @@ class _MapViewState extends State<MapView> {
               _mapController.addLayer("coba", "test");
             },
             child: Text("2. place img"),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: log.length,
+              itemBuilder: (context, index) {
+                return Text(
+                  log[index],
+                  textAlign: TextAlign.center,
+                );
+              },
+            ),
           ),
         ],
       ),
